@@ -57,6 +57,12 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* Атрибут hidden обязан скрывать — без этой строки он не работает.
+   Браузер задаёт для него display:none в своей таблице стилей, а любое
+   авторское правило display перебивает её целиком. У кнопки .btn стоит
+   inline-flex, и «Назад» оставался виден на первом шаге калькулятора. */
+[hidden] { display: none !important; }
+
 html { scroll-behavior: smooth; }
 
 body {
