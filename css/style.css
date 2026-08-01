@@ -1,0 +1,712 @@
+/* ============================================================================
+   ARMORA — оклейка и защита кузова.
+
+   Реализация по мотивам концепта Татьяны Кирхеснер (Behance, «Landing Page
+   auto | Сайт оклейка авто»). Палитра снята пипеткой с макета: фон #0c0c0c,
+   акцент #ec0044.
+
+   Ни фреймворков, ни сборки: только эти три файла. Страница должна
+   открываться на телефоне в дороге, а не ждать мегабайты скриптов.
+   ============================================================================ */
+
+:root {
+  --bg: #0a0a0b;
+  --bg-deep: #050506;
+  --surface: #121214;
+  --surface-2: #17171a;
+  --surface-3: #1e1e22;
+
+  --text: #f5f5f7;
+  --muted: #a1a1aa;
+  /* Замерено: #71717a давал 3.87:1 на карточке — ниже нормы для мелкого
+     текста, а им набраны подписи классов и шагов. #8b8b96 даёт 5.55:1 на
+     карточке и 5.87:1 на фоне, оставаясь заметно тише основного текста. */
+  --faint: #8b8b96;
+
+  --accent: #ec0044;
+  --accent-hot: #ff2a5f;
+  --accent-soft: rgba(236, 0, 68, 0.12);
+  --accent-line: rgba(236, 0, 68, 0.28);
+
+  /* Акцент бывает двух видов, и путать их нельзя.
+
+     --accent — заливка: кнопки, плашки, полоска прогресса. Как ТЕКСТ он
+     годится только крупным кеглем: на поверхности карточки даёт 4.14:1,
+     это ниже нормы 4.5 для обычного текста.
+
+     --accent-text — тот же цвет, осветлённый до 5.85:1 на карточке и
+     6.19:1 на фоне. Им набирается всё мелкое: надзаголовки, ссылки,
+     подписи. Разница на глаз почти незаметна, а читаемость другая. */
+  --accent-text: #ff4d75;
+
+  /* Тёмный текст на малиновой заливке: 4.51:1 против 4.1:1 у белого. */
+  --on-accent: #12000a;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-pill: 999px;
+
+  --maxw: 1220px;
+  --t: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  --font: 'Golos Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* Перебивает горизонтальный вынос декоративных свечений. */
+  overflow-x: hidden;
+}
+
+/* height:auto обязателен. В разметке у картинок проставлены width и height —
+   они резервируют место и не дают странице дёргаться при загрузке. Но без
+   height:auto браузер считает высоту заданной, и любой aspect-ratio ниже
+   молча игнорируется: карточки вытягивались вдвое. */
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; }
+
+h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.02em; font-weight: 600; }
+
+.wrap {
+  width: min(100% - 40px, var(--maxw));
+  margin-inline: auto;
+}
+
+.section { padding: clamp(56px, 8vw, 104px) 0; }
+
+.section-head { margin-bottom: clamp(28px, 4vw, 48px); }
+
+.section-title {
+  font-size: clamp(26px, 4.2vw, 44px);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.section-sub {
+  color: var(--muted);
+  text-align: center;
+  max-width: 62ch;
+  margin: 14px auto 0;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--accent);
+  color: var(--on-accent);
+  padding: 12px 18px;
+  z-index: 100;
+  border-radius: 0 0 var(--radius-sm) 0;
+}
+.skip-link:focus { left: 0; }
+
+/* ── Кнопки ───────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 28px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 12px 34px -12px rgba(236, 0, 68, 0.75);
+}
+.btn-primary:hover { background: var(--accent-hot); transform: translateY(-2px); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn-sm { padding: 11px 20px; font-size: 12.5px; }
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent-hot);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ── Шапка ────────────────────────────────────────────────────────────────── */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(10, 10, 11, 0.82);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 14px 0;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: 26px;
+  margin-left: auto;
+  font-size: 14.5px;
+}
+.nav-links a { color: var(--muted); text-decoration: none; transition: color var(--t); }
+.nav-links a:hover { color: var(--text); }
+
+.nav-phone {
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 15px;
+}
+
+.nav-toggle {
+  display: none;
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  padding: 8px;
+  cursor: pointer;
+}
+.nav-toggle svg { width: 22px; height: 22px; display: block; }
+
+/* ── Герой ────────────────────────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  padding: clamp(48px, 7vw, 90px) 0 clamp(40px, 5vw, 64px);
+  overflow: hidden;
+}
+
+/* Свечение под машиной — то самое красное зарево из макета.
+   Радиальный градиент, а не картинка: масштабируется без веса. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 120%;
+  background: radial-gradient(60% 55% at 70% 45%, rgba(236, 0, 68, 0.30), transparent 70%);
+  pointer-events: none;
+}
+
+.hero-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+}
+
+.hero h1 {
+  font-size: clamp(30px, 5vw, 54px);
+  margin: 18px 0 18px;
+  text-wrap: balance;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+
+.hero-lead { color: var(--muted); max-width: 46ch; margin: 0 0 28px; }
+
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+.hero-note { color: var(--faint); font-size: 13.5px; max-width: 30ch; }
+
+.hero-media { position: relative; }
+.hero-media img {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+/* ── Плашки под героем ────────────────────────────────────────────────────── */
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-top: clamp(28px, 4vw, 44px);
+  position: relative;
+}
+
+.fact {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Угловой скос — приём из макета: диагональная малиновая метка в углу. */
+.fact::after {
+  content: '';
+  position: absolute;
+  right: -28px;
+  top: -28px;
+  width: 74px;
+  height: 74px;
+  background: var(--accent-soft);
+  transform: rotate(45deg);
+}
+
+.fact b {
+  display: block;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.fact span { color: var(--muted); font-size: 14px; }
+
+/* ── Калькулятор ──────────────────────────────────────────────────────────── */
+
+.calc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(22px, 4vw, 40px);
+}
+
+.calc-progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.calc-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--surface-3);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+.calc-bar i {
+  display: block;
+  height: 100%;
+  width: 25%;
+  background: var(--accent);
+  border-radius: inherit;
+  transition: width var(--t);
+}
+.calc-step-label { color: var(--faint); font-size: 13.5px; white-space: nowrap; }
+
+.calc-question { font-size: clamp(19px, 2.6vw, 25px); margin-bottom: 20px; }
+
+.calc-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.calc-option {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  padding: 16px 18px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color var(--t), background var(--t);
+}
+.calc-option:hover { border-color: var(--border-strong); }
+.calc-option[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.calc-option strong { font-weight: 600; }
+.calc-option span { color: var(--muted); font-size: 13.5px; }
+
+.calc-nav { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+.calc-result {
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+  padding-top: 24px;
+}
+.calc-total {
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.calc-total small { display: block; font-size: 14px; font-weight: 400; color: var(--muted); margin-top: 6px; }
+
+/* ── Комплексы ────────────────────────────────────────────────────────────── */
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  width: fit-content;
+  margin: 0 auto clamp(26px, 4vw, 40px);
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tab {
+  padding: 11px 24px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background var(--t), color var(--t);
+}
+.tab[aria-selected='true'] { background: var(--accent); color: var(--on-accent); }
+
+.tiers { display: grid; gap: 16px; }
+
+.tier {
+  display: grid;
+  grid-template-columns: minmax(200px, 300px) minmax(0, 1fr) auto;
+  gap: clamp(16px, 3vw, 32px);
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  transition: border-color var(--t);
+}
+.tier:hover { border-color: var(--accent-line); }
+
+.tier-media img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.tier-name {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--accent-text);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.tier-badge {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  text-transform: uppercase;
+}
+.tier-desc { color: var(--muted); font-size: 14.5px; margin: 8px 0 12px; }
+.tier-includes { color: var(--faint); font-size: 13.5px; margin: 0; }
+.tier-includes b { color: var(--muted); font-weight: 600; }
+
+.tier-prices { text-align: right; min-width: 190px; }
+.tier-price {
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.tier-class { color: var(--faint); font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.08em; }
+.tier-more {
+  display: flex;
+  gap: 18px;
+  justify-content: flex-end;
+  margin: 12px 0 16px;
+  color: var(--muted);
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Доверие ──────────────────────────────────────────────────────────────── */
+
+.trust { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(18px, 3vw, 34px); }
+
+.trust-points { display: grid; gap: 22px; align-content: start; }
+
+.trust-point { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; }
+.trust-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-text);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+.trust-point h3 { font-size: 17px; margin-bottom: 6px; }
+.trust-point p { color: var(--muted); font-size: 14.5px; margin: 0; }
+
+.mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.mosaic img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
+.mosaic figure { margin: 0; min-height: 0; }
+.mosaic figure:first-child { grid-row: span 2; }
+
+/* ── Процесс ──────────────────────────────────────────────────────────────── */
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+/* Чередование, как в макете: часть шагов залита акцентом. */
+.step:nth-child(2n) { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+/* На малиновом номер задаётся своей прозрачностью: 0.45 давало 2.93:1. */
+.step:nth-child(2n) .step-num { color: rgba(18, 0, 10, 0.58); opacity: 1; }
+
+.step p { margin: 0; font-size: 14.5px; }
+.step:not(:nth-child(2n)) p { color: var(--muted); }
+
+/* Номер шага — крупная приглушённая цифра. Раньше он брал --surface-3 и
+   давал 1.13:1: на экране его просто не существовало. Теперь виден как
+   тихий ориентир, но не спорит с текстом. */
+.step-num {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--faint);
+  opacity: 0.55;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Работы ───────────────────────────────────────────────────────────────── */
+
+.works { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+
+.work {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color var(--t), transform var(--t);
+}
+.work:hover { border-color: var(--accent-line); transform: translateY(-3px); }
+.work img { width: 100%; aspect-ratio: 16 / 11; object-fit: cover; }
+.work-body { padding: 16px 18px 20px; }
+.work-body h3 { font-size: 16px; margin-bottom: 4px; }
+.work-body p { color: var(--muted); font-size: 13.5px; margin: 0; }
+
+/* ── Заявка ───────────────────────────────────────────────────────────────── */
+
+.lead {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(100deg, rgba(10, 10, 11, 0.94) 38%, rgba(10, 10, 11, 0.55) 100%),
+    var(--surface);
+}
+.lead-inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(22px, 4vw, 46px);
+  padding: clamp(24px, 4vw, 48px);
+  position: relative;
+}
+.lead h2 { font-size: clamp(22px, 3.4vw, 34px); margin-bottom: 12px; text-wrap: balance; }
+.lead p { color: var(--muted); margin: 0; }
+
+.field { display: grid; gap: 7px; margin-bottom: 16px; }
+.field > span { font-size: 13.5px; color: var(--muted); }
+.field input, .field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  transition: border-color var(--t);
+}
+.field input:hover, .field textarea:hover { border-color: var(--border-strong); }
+.field input::placeholder { color: var(--faint); }
+.field.is-error input { border-color: var(--accent); }
+.field-error { color: var(--accent-text); font-size: 13px; min-height: 1.2em; }
+
+.consent {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.consent input { margin-top: 3px; accent-color: var(--accent); width: 17px; height: 17px; }
+.consent a { color: var(--muted); }
+
+.form-status { margin-top: 14px; font-size: 14px; min-height: 1.4em; }
+.form-status.is-ok { color: #4ade80; }
+.form-status.is-error { color: var(--accent-text); }
+
+/* ── Отзывы ───────────────────────────────────────────────────────────────── */
+
+.reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+
+.review {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+.review--accent { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.review--accent .review-text { color: rgba(18, 0, 10, 0.82); }
+
+.review-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 12px; }
+.review-name { font-weight: 600; }
+.review-stars { color: var(--accent-text); letter-spacing: 2px; font-size: 13px; }
+.review--accent .review-stars { color: var(--on-accent); }
+.review-text { color: var(--muted); font-size: 14.5px; margin: 0; }
+
+.score { display: flex; align-items: baseline; gap: 8px; }
+.score b { font-size: 28px; font-weight: 700; color: var(--accent-text); font-variant-numeric: tabular-nums; }
+.score span { color: var(--muted); font-size: 14px; }
+
+/* ── Подвал ───────────────────────────────────────────────────────────────── */
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 34px 0;
+  background: var(--bg-deep);
+}
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 26px;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--faint);
+  font-size: 13.5px;
+}
+.footer-inner a { color: var(--muted); text-decoration: none; }
+.footer-inner a:hover { color: var(--accent); }
+
+/* ── Появление блоков ─────────────────────────────────────────────────────── */
+
+.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 520ms ease, transform 520ms ease; }
+.js .reveal.is-visible { opacity: 1; transform: none; }
+
+/* ── Адаптив ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); }
+  .hero-media { order: -1; }
+  .tier { grid-template-columns: minmax(0, 1fr); }
+  .tier-prices { text-align: left; }
+  .tier-more { justify-content: flex-start; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    flex-direction: column;
+    gap: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 20px 18px;
+  }
+  .nav-links.is-open { display: flex; }
+  .nav-links a { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .nav-toggle { display: block; }
+  .nav-phone { display: none; }
+  .nav-inner { position: relative; }
+}
+
+@media (max-width: 560px) {
+  .wrap { width: min(100% - 28px, var(--maxw)); }
+  .mosaic figure:first-child { grid-row: auto; }
+  .btn { width: 100%; }
+  .hero-actions .btn { width: auto; flex: 1 1 200px; }
+}
+
+/* Уважаем системную настройку: анимации выключаются целиком. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .js .reveal { opacity: 1; transform: none; }
+}

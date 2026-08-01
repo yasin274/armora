@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARMORA — оклейка и защита кузова плёнкой</title>
+<meta name="description" content="Защита кузова полиуретановой плёнкой: зоны риска, стандарт и полная оклейка. Гарантия 7 лет, расчёт стоимости за минуту, оригинальные материалы.">
+
+<meta name="theme-color" content="#0a0a0b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ARMORA — оклейка и защита кузова плёнкой">
+<meta property="og:description" content="Полиуретан и винил, гарантия 7 лет, расчёт стоимости за минуту.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0b'/%3E%3Cpath d='M16 5l9 3.4v7.2c0 5.2-3.6 9.6-9 11.4-5.4-1.8-9-6.2-9-11.4V8.4z' fill='none' stroke='%23ec0044' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap&subset=cyrillic,latin" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top">ARM<span>O</span>RA</a>
+
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="navLinks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"/>
+      </svg>
+    </button>
+
+    <nav class="nav-links" id="navLinks" aria-label="Разделы сайта">
+      <a href="#calc">Расчёт</a>
+      <a href="#packages">Комплексы</a>
+      <a href="#process">Процесс</a>
+      <a href="#works">Работы</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+
+    <a class="nav-phone" href="tel:+79990000000">+7 (999) 000-00-00</a>
+    <a class="btn btn-primary btn-sm" href="#contact">Записаться</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ── Герой ────────────────────────────────────────────────────────────── -->
+  <section class="hero" id="top">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Оклейка и защита кузова</p>
+          <h1>Защитим кузов от сколов и царапин <em>премиальной плёнкой</em></h1>
+          <p class="hero-lead">
+            Полиуретан толщиной 200 микрон принимает на себя щебень, реагенты
+            и мойку. Кузов остаётся заводским — а значит и цена машины тоже.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#calc">Рассчитать стоимость</a>
+            <a class="btn btn-ghost" href="#works">Смотреть работы</a>
+          </div>
+          <p class="hero-note" style="margin-top:18px">Расчёт занимает минуту и ни к чему не обязывает.</p>
+        </div>
+
+        <div class="hero-media">
+          <img src="assets/photos/hero.jpg" width="1400" height="900" alt="Тёмный спортивный автомобиль в студийном освещении, кузов отражает свет"
+               fetchpriority="high" decoding="async">
+        </div>
+      </div>
+
+      <ul class="facts" style="list-style:none;padding:0">
+        <li class="fact"><b>7 лет</b><span>гарантия на плёнку и работу</span></li>
+        <li class="fact"><b>200 мкм</b><span>толщина полиуретана, самовосстановление</span></li>
+        <li class="fact"><b>4 дня</b><span>средний срок полной оклейки</span></li>
+        <li class="fact"><b>340+</b><span>автомобилей за три года</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Калькулятор ──────────────────────────────────────────────────────── -->
+  <section class="section" id="calc">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 class="section-title">Рассчитайте стоимость для своего автомобиля</h2>
+        <p class="section-sub">Три вопроса — и вы увидите вилку цены. Точную смету назовём после осмотра.</p>
+      </div>
+
+      <div class="calc reveal" id="calcBox">
+        <div class="calc-progress">
+          <div class="calc-bar"><i id="calcBar"></i></div>
+          <span class="calc-step-label" id="calcStepLabel">Шаг 1 из 3</span>
+        </div>
+
+        <h3 class="calc-question" id="calcQuestion">Какой у вас автомобиль?</h3>
+
+        <div class="calc-options" id="calcOptions" role="group" aria-labelledby="calcQuestion"></div>
+
+        <div class="calc-nav">
+          <button class="btn btn-ghost btn-sm" type="button" id="calcBack" hidden>Назад</button>
+          <button class="btn btn-primary btn-sm" type="button" id="calcNext" disabled>Далее</button>
+        </div>
+
+        <div class="calc-result" id="calcResult" hidden>
+          <p class="calc-step-label" style="margin:0 0 6px">Ориентировочная стоимость</p>
+          <p class="calc-total" id="calcTotal" aria-live="polite">— ₽</p>
+          <p class="calc-total"><small id="calcSummary"></small></p>
+          <div class="calc-nav" style="margin-top:18px">
+            <a class="btn btn-primary btn-sm" href="#contact">Оставить заявку</a>
+            <button class="btn btn-ghost btn-sm" type="button" id="calcReset">Посчитать заново</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Комплексы ────────────────────────────────────────────────────────── -->
+  <section class="section" id="packages" style="background:var(--bg-deep)">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 class="section-title">Комплексы по защите кузова</h2>
+      </div>
+
+      <div class="tabs reveal" role="tablist" aria-label="Виды услуг">
+        <button class="tab" role="tab" id="tab-film" aria-selected="true" aria-controls="panel-film" type="button">Защита плёнкой</button>
+        <button class="tab" role="tab" id="tab-detail" aria-selected="false" aria-controls="panel-detail" type="button">Детейлинг</button>
+      </div>
+
+      <div class="tiers reveal" id="panel-film" role="tabpanel" aria-labelledby="tab-film">
+        <article class="tier">
+          <div class="tier-media">
+            <img src="assets/photos/tier-1.jpg" width="720" height="460" loading="lazy" decoding="async"
+                 alt="Передняя часть тёмного автомобиля с включёнными фарами в полумраке">
+          </div>
+          <div>
+            <h3 class="tier-name">Зоны риска</h3>
+            <p class="tier-desc">
+              Плёнка на участки, куда прилетает щебень: там появляется 90% сколов.
+              Самый частый первый шаг.
+            </p>
+            <p class="tier-includes"><b>Входит:</b> капот на треть, фары, передний бампер, зеркала, стойки</p>
+          </div>
+          <div class="tier-prices">
+            <p class="tier-class">I класс</p>
+            <p class="tier-price">20 000 ₽</p>
+            <p class="tier-more"><span>II — 30 000 ₽</span><span>III — 40 000 ₽</span></p>
+            <a class="btn btn-ghost btn-sm" href="#calc">Рассчитать</a>
+          </div>
+        </article>
+
+        <article class="tier">
+          <div class="tier-media">
+            <img src="assets/photos/tier-2.jpg" width="720" height="460" loading="lazy" decoding="async"
+                 alt="Крупный план красных задних фонарей автомобиля">
+          </div>
+          <div>
+            <h3 class="tier-name">Стандарт <span class="tier-badge">чаще всего</span></h3>
+            <p class="tier-desc">
+              Весь перёд плюс уязвимые зоны по кузову. Разумный баланс: закрывает
+              то, что бьётся, без стоимости полной оклейки.
+            </p>
+            <p class="tier-includes"><b>Входит:</b> капот целиком, крылья, бампер, фары, зеркала, стойки, погрузочная зона багажника</p>
+          </div>
+          <div class="tier-prices">
+            <p class="tier-class">I класс</p>
+            <p class="tier-price">80 000 ₽</p>
+            <p class="tier-more"><span>II — 90 000 ₽</span><span>III — 100 000 ₽</span></p>
+            <a class="btn btn-ghost btn-sm" href="#calc">Рассчитать</a>
+          </div>
+        </article>
+
+        <article class="tier">
+          <div class="tier-media">
+            <img src="assets/photos/tier-3.jpg" width="720" height="460" loading="lazy" decoding="async"
+                 alt="Автомобиль, оклеенный камуфляжной плёнкой, вид спереди">
+          </div>
+          <div>
+            <h3 class="tier-name">Полная защита</h3>
+            <p class="tier-desc">
+              Кузов целиком под плёнкой. Заводская краска не встречается с
+              дорогой вообще — при продаже это видно и в осмотре, и в цене.
+            </p>
+            <p class="tier-includes"><b>Входит:</b> все кузовные элементы, фары, зеркала, пороги, дверные ручки и проёмы</p>
+          </div>
+          <div class="tier-prices">
+            <p class="tier-class">I класс</p>
+            <p class="tier-price">210 000 ₽</p>
+            <p class="tier-more"><span>II — 230 000 ₽</span><span>III — 250 000 ₽</span></p>
+            <a class="btn btn-ghost btn-sm" href="#calc">Рассчитать</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="tiers reveal" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail" hidden>
+        <article class="tier">
+          <div class="tier-media">
+            <img src="assets/photos/trust-3.jpg" width="640" height="420" loading="lazy" decoding="async"
+                 alt="Полировальная машинка в работе на кузове автомобиля">
+          </div>
+          <div>
+            <h3 class="tier-name">Полировка кузова</h3>
+            <p class="tier-desc">
+              Убираем паутинку и микроцарапины от неправильной мойки. Перед
+              работой замеряем толщину лака и снимаем только то, что нужно.
+            </p>
+            <p class="tier-includes"><b>Входит:</b> замер толщины ЛКП, двухэтапная полировка, защитный состав</p>
+          </div>
+          <div class="tier-prices">
+            <p class="tier-class">I класс</p>
+            <p class="tier-price">18 000 ₽</p>
+            <p class="tier-more"><span>II — 24 000 ₽</span><span>III — 30 000 ₽</span></p>
+            <a class="btn btn-ghost btn-sm" href="#contact">Записаться</a>
+          </div>
+        </article>
+
+        <article class="tier">
+          <div class="tier-media">
+            <img src="assets/photos/trust-2.jpg" width="640" height="420" loading="lazy" decoding="async"
+                 alt="Мойка кузова автомобиля губкой с пеной">
+          </div>
+          <div>
+            <h3 class="tier-name">Керамика</h3>
+            <p class="tier-desc">
+              Гидрофобный состав поверх краски или плёнки: грязь держится хуже,
+              мойка занимает меньше времени, блеск глубже.
+            </p>
+            <p class="tier-includes"><b>Входит:</b> подготовка поверхности, нанесение в два слоя, сушка в боксе</p>
+          </div>
+          <div class="tier-prices">
+            <p class="tier-class">I класс</p>
+            <p class="tier-price">26 000 ₽</p>
+            <p class="tier-more"><span>II — 32 000 ₽</span><span>III — 38 000 ₽</span></p>
+            <a class="btn btn-ghost btn-sm" href="#contact">Записаться</a>
+          </div>
+        </article>
+
+        <article class="tier">
+          <div class="tier-media">
+            <img src="assets/photos/process.jpg" width="760" height="520" loading="lazy" decoding="async"
+                 alt="Рука в перчатке очищает колёсный диск щёткой">
+          </div>
+          <div>
+            <h3 class="tier-name">Химчистка салона</h3>
+            <p class="tier-desc">
+              Глубокая чистка ткани, кожи и пластика с озонированием.
+              Запах уходит вместе с причиной, а не маскируется отдушкой.
+            </p>
+            <p class="tier-includes"><b>Входит:</b> разбор салона, чистка обивки и потолка, уход за кожей, озонирование</p>
+          </div>
+          <div class="tier-prices">
+            <p class="tier-class">I класс</p>
+            <p class="tier-price">12 000 ₽</p>
+            <p class="tier-more"><span>II — 15 000 ₽</span><span>III — 19 000 ₽</span></p>
+            <a class="btn btn-ghost btn-sm" href="#contact">Записаться</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Доверие ──────────────────────────────────────────────────────────── -->
+  <section class="section" id="trust">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 class="section-title">Почему нам доверяют</h2>
+      </div>
+
+      <div class="trust reveal">
+        <div class="trust-points">
+          <div class="trust-point">
+            <span class="trust-num">01</span>
+            <div>
+              <h3>Гарантия и контрольный осмотр</h3>
+              <p>
+                Семь лет на плёнку и на работу. Через две недели после оклейки
+                зовём на осмотр — плёнка окончательно садится именно к этому сроку,
+                и все спорные места видно сразу.
+              </p>
+            </div>
+          </div>
+          <div class="trust-point">
+            <span class="trust-num">02</span>
+            <div>
+              <h3>Только оригинальные материалы</h3>
+              <p>
+                Полиуретан и винил проверенных марок, с сертификатом на партию.
+                Дешёвая плёнка желтеет за сезон, и снять её без следов уже нельзя.
+              </p>
+            </div>
+          </div>
+          <div class="trust-point">
+            <span class="trust-num">03</span>
+            <div>
+              <h3>Работа в закрытом боксе</h3>
+              <p>
+                Оклейка идёт в чистом помещении с подготовленным воздухом.
+                Пылинка под плёнкой — это брак, который видно годами.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mosaic">
+          <figure><img src="assets/photos/trust-1.jpg" width="640" height="760" loading="lazy" decoding="async"
+                       alt="Мастер разглаживает защитную плёнку на фаре автомобиля"></figure>
+          <figure><img src="assets/photos/work-2.jpg" width="760" height="520" loading="lazy" decoding="async"
+                       alt="Нанесение плёнки на кузов ракелем"></figure>
+          <figure><img src="assets/photos/work-1.jpg" width="760" height="520" loading="lazy" decoding="async"
+                       alt="Раскрой виниловой плёнки перед оклейкой"></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Процесс ──────────────────────────────────────────────────────────── -->
+  <section class="section" id="process" style="background:var(--bg-deep)">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 class="section-title">Как проходит оклейка</h2>
+        <p class="section-sub">Шесть этапов, три-четыре дня. Машину забираете чистой и без запаха химии.</p>
+      </div>
+
+      <ol class="steps reveal" style="list-style:none;padding:0;margin:0">
+        <li class="step"><p>Моем на детейлинг-мойке и оцениваем состояние ЛКП</p><span class="step-num">01</span></li>
+        <li class="step"><p>При полной оклейке разбираем кузовные элементы в боксе</p><span class="step-num">02</span></li>
+        <li class="step"><p>Снимаем сильные загрязнения — битум, реагенты, следы насекомых</p><span class="step-num">03</span></li>
+        <li class="step"><p>Полируем кузов, чтобы под плёнкой не осталось царапин</p><span class="step-num">04</span></li>
+        <li class="step"><p>Обезжириваем поверхность и клеим плёнку по выкройке</p><span class="step-num">05</span></li>
+        <li class="step"><p>Сушим, собираем и на следующий день отдаём владельцу</p><span class="step-num">06</span></li>
+      </ol>
+
+      <div style="text-align:center;margin-top:28px" class="reveal">
+        <a class="btn btn-primary" href="#calc">Рассчитать стоимость</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Работы ───────────────────────────────────────────────────────────── -->
+  <section class="section" id="works">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 class="section-title">Наши работы</h2>
+      </div>
+
+      <div class="works reveal">
+        <article class="work">
+          <img src="assets/photos/work-3.jpg" width="760" height="520" loading="lazy" decoding="async"
+               alt="Задняя часть автомобиля с горящими фонарями в тумане">
+          <div class="work-body"><h3>Купе, полная защита</h3><p>Полиуретан на весь кузов, 4 дня</p></div>
+        </article>
+        <article class="work">
+          <img src="assets/photos/work-4.jpg" width="760" height="520" loading="lazy" decoding="async"
+               alt="Колесо и крыло автомобиля крупным планом, чёрно-белый снимок">
+          <div class="work-body"><h3>Седан, стандарт</h3><p>Перёд и уязвимые зоны, 2 дня</p></div>
+        </article>
+        <article class="work">
+          <img src="assets/photos/tier-3.jpg" width="720" height="460" loading="lazy" decoding="async"
+               alt="Автомобиль в камуфляжной виниловой плёнке">
+          <div class="work-body"><h3>Кроссовер, цветной винил</h3><p>Смена цвета целиком, 5 дней</p></div>
+        </article>
+        <article class="work">
+          <img src="assets/photos/tier-1.jpg" width="720" height="460" loading="lazy" decoding="async"
+               alt="Тёмный автомобиль с включёнными фарами">
+          <div class="work-body"><h3>Хэтчбек, зоны риска</h3><p>Капот, бампер и фары, 1 день</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Заявка ───────────────────────────────────────────────────────────── -->
+  <section class="section" id="contact">
+    <div class="wrap">
+      <div class="lead reveal">
+        <div class="lead-inner">
+          <div>
+            <h2>Получите консультацию и расчёт</h2>
+            <p>
+              Оставьте контакт — перезвоним, уточним модель и состояние кузова
+              и назовём точную стоимость. Без навязывания: если плёнка вам не
+              нужна, так и скажем.
+            </p>
+            <p style="margin-top:20px;color:var(--faint);font-size:13.5px">
+              Или сразу: <a href="tel:+79990000000" style="color:var(--accent-text)">+7 (999) 000-00-00</a>
+            </p>
+          </div>
+
+          <form id="leadForm" novalidate>
+            <label class="field" id="fieldName">
+              <span>Как к вам обращаться</span>
+              <input type="text" name="name" autocomplete="name" placeholder="Имя" required>
+              <span class="field-error" data-error></span>
+            </label>
+
+            <label class="field" id="fieldPhone">
+              <span>Телефон</span>
+              <input type="tel" name="phone" autocomplete="tel" placeholder="+7 (___) ___-__-__" required>
+              <span class="field-error" data-error></span>
+            </label>
+
+            <label class="field" id="fieldCar">
+              <span>Марка и модель <span style="color:var(--faint)">— необязательно</span></span>
+              <input type="text" name="car" placeholder="Например, Skoda Kodiaq">
+              <span class="field-error" data-error></span>
+            </label>
+
+            <!-- Ловушка для ботов: человек этого поля не видит, автозаполнитель заполняет. -->
+            <div style="position:absolute;left:-9999px" aria-hidden="true">
+              <label>Не заполняйте<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
+
+            <label class="consent" id="fieldConsent">
+              <input type="checkbox" name="consent" required>
+              <span>Согласен на обработку персональных данных <a href="privacy.html">согласно политике</a></span>
+            </label>
+
+            <button class="btn btn-primary" type="submit" style="width:100%">Отправить заявку</button>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Отзывы ───────────────────────────────────────────────────────────── -->
+  <section class="section" id="reviews" style="background:var(--bg-deep)">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 class="section-title">Что говорят клиенты</h2>
+      </div>
+
+      <div class="reviews reveal">
+        <div class="review">
+          <div class="review-top"><span class="review-name">Качество оклейки</span></div>
+          <div class="score"><b>98%</b><span>довольны результатом</span></div>
+        </div>
+
+        <div class="review review--accent">
+          <div class="review-top">
+            <span class="review-name">Анатолий А.</span>
+            <span class="review-stars" aria-label="Оценка 5 из 5">★★★★★</span>
+          </div>
+          <p class="review-text">
+            Оклеивал Kodiaq полностью. Понравилось, что перед работой показали
+            замеры и объяснили, где плёнка реально нужна, а где переплата.
+            Через две недели позвали на осмотр — подтянули один край на бампере.
+          </p>
+        </div>
+
+        <div class="review">
+          <div class="review-top"><span class="review-name">Сроки</span></div>
+          <div class="score"><b>96%</b><span>сдано в обещанный день</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© <span id="year">2026</span> ARMORA · Оклейка и защита кузова</span>
+    <span><a href="tel:+79990000000">+7 (999) 000-00-00</a> · <a href="privacy.html">Политика обработки данных</a></span>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
