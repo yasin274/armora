@@ -2,8 +2,8 @@
    ARMORA — оклейка и защита кузова.
 
    Реализация по мотивам концепта Татьяны Кирхеснер (Behance, «Landing Page
-   auto | Сайт оклейка авто»). Палитра снята пипеткой с макета: фон #0c0c0c,
-   акцент #ec0044.
+   auto | Сайт оклейка авто»). Тёмная основа взята с макета (#0c0c0c),
+   акцент заменён на золотой по просьбе заказчика.
 
    Ни фреймворков, ни сборки: только эти три файла. Страница должна
    открываться на телефоне в дороге, а не ждать мегабайты скриптов.
@@ -23,24 +23,21 @@
      карточке и 5.87:1 на фоне, оставаясь заметно тише основного текста. */
   --faint: #8b8b96;
 
-  --accent: #ec0044;
-  --accent-hot: #ff2a5f;
-  --accent-soft: rgba(236, 0, 68, 0.12);
-  --accent-line: rgba(236, 0, 68, 0.28);
+  --accent: #dbb04f;
+  --accent-hot: #ecc46a;
+  --accent-soft: rgba(219, 176, 79, 0.12);
+  --accent-line: rgba(219, 176, 79, 0.30);
 
-  /* Акцент бывает двух видов, и путать их нельзя.
+  /* Раньше акцент был малиновым, и его приходилось раздваивать: как текст
+     он давал 4.14:1 и не проходил норму, для мелкого кегля был нужен
+     осветлённый вариант. Золото такой проблемы не создаёт — 9.21:1 на
+     карточке и 9.74:1 на фоне, — поэтому оба токена указывают на один цвет.
+     Разделение оставлено, чтобы не переписывать правила и чтобы смена
+     акцента в будущем снова была возможна одной строкой. */
+  --accent-text: #dbb04f;
 
-     --accent — заливка: кнопки, плашки, полоска прогресса. Как ТЕКСТ он
-     годится только крупным кеглем: на поверхности карточки даёт 4.14:1,
-     это ниже нормы 4.5 для обычного текста.
-
-     --accent-text — тот же цвет, осветлённый до 5.85:1 на карточке и
-     6.19:1 на фоне. Им набирается всё мелкое: надзаголовки, ссылки,
-     подписи. Разница на глаз почти незаметна, а читаемость другая. */
-  --accent-text: #ff4d75;
-
-  /* Тёмный текст на малиновой заливке: 4.51:1 против 4.1:1 у белого. */
-  --on-accent: #12000a;
+  /* Тёмный текст на золотой заливке: 9.33:1. */
+  --on-accent: #14100a;
 
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
@@ -155,7 +152,7 @@ h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.02em; font-weight:
 .btn-primary {
   background: var(--accent);
   color: var(--on-accent);
-  box-shadow: 0 12px 34px -12px rgba(236, 0, 68, 0.75);
+  box-shadow: 0 12px 34px -12px rgba(219, 176, 79, 0.55);
 }
 .btn-primary:hover { background: var(--accent-hot); transform: translateY(-2px); }
 
@@ -237,14 +234,16 @@ h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.02em; font-weight:
   overflow: hidden;
 }
 
-/* Свечение под машиной — то самое красное зарево из макета.
-   Радиальный градиент, а не картинка: масштабируется без веса. */
+/* Свечение под машиной — зарево из макета, в золоте вместо малинового.
+   Радиальный градиент, а не картинка: масштабируется без веса и меняет
+   цвет вместе с акцентом. Плотность ниже, чем была: золото само по себе
+   светлее, и при 0.30 фон уходил в грязно-жёлтый. */
 .hero::before {
   content: '';
   position: absolute;
   inset: -20% -10% auto -10%;
   height: 120%;
-  background: radial-gradient(60% 55% at 70% 45%, rgba(236, 0, 68, 0.30), transparent 70%);
+  background: radial-gradient(60% 55% at 70% 45%, rgba(219, 176, 79, 0.22), transparent 70%);
   pointer-events: none;
 }
 
@@ -537,7 +536,7 @@ h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.02em; font-weight:
 /* Чередование, как в макете: часть шагов залита акцентом. */
 .step:nth-child(2n) { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 /* На малиновом номер задаётся своей прозрачностью: 0.45 давало 2.93:1. */
-.step:nth-child(2n) .step-num { color: rgba(18, 0, 10, 0.58); opacity: 1; }
+.step:nth-child(2n) .step-num { color: rgba(20, 16, 10, 0.55); opacity: 1; }
 
 .step p { margin: 0; font-size: 14.5px; }
 .step:not(:nth-child(2n)) p { color: var(--muted); }
@@ -637,7 +636,7 @@ h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.02em; font-weight:
   padding: 22px;
 }
 .review--accent { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-.review--accent .review-text { color: rgba(18, 0, 10, 0.82); }
+.review--accent .review-text { color: rgba(20, 16, 10, 0.82); }
 
 .review-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 12px; }
 .review-name { font-weight: 600; }
@@ -715,4 +714,144 @@ h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.02em; font-weight:
     transition-duration: 0.01ms !important;
   }
   .js .reveal { opacity: 1; transform: none; }
+}
+
+/* ── Внутренние страницы ──────────────────────────────────────────────────── */
+
+/* Шапка внутренней страницы: тот же приём, что в герое, но тише — на
+   внутренних страницах главный герой уже не нужен, нужен ориентир. */
+.page-head {
+  position: relative;
+  padding: clamp(96px, 12vw, 140px) 0 clamp(36px, 5vw, 56px);
+  overflow: hidden;
+}
+.page-head::before {
+  content: '';
+  position: absolute;
+  inset: -40% -10% auto -10%;
+  height: 150%;
+  background: radial-gradient(50% 60% at 20% 30%, rgba(219, 176, 79, 0.14), transparent 70%);
+  pointer-events: none;
+}
+.page-head > .wrap { position: relative; }
+.page-head h1 {
+  font-size: clamp(28px, 5vw, 48px);
+  margin: 14px 0 16px;
+  text-wrap: balance;
+}
+.page-head p { color: var(--muted); max-width: 62ch; margin: 0; }
+
+/* Хлебные крошки: на многостраничнике человек должен понимать, где он. */
+.crumbs { font-size: 13.5px; color: var(--faint); }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--accent); }
+.crumbs span { margin: 0 8px; }
+
+/* Текущий раздел в меню подсвечен — иначе на пятой странице теряешься. */
+.nav-links a[aria-current='page'] { color: var(--accent); font-weight: 600; }
+
+/* ── Материалы (страница услуг) ───────────────────────────────────────────── */
+
+.matrix { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.matrix th, .matrix td { padding: 14px 16px; border-bottom: 1px solid var(--border); text-align: left; }
+.matrix th {
+  color: var(--faint);
+  font-weight: 500;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.matrix td { color: var(--muted); }
+.matrix td:first-child { color: var(--text); font-weight: 600; }
+.matrix td:not(:first-child) { font-variant-numeric: tabular-nums; }
+.matrix tr:last-child td { border-bottom: 0; }
+.table-scroll { overflow-x: auto; }
+
+/* ── Вопросы и ответы ─────────────────────────────────────────────────────── */
+
+.faq { display: grid; gap: 10px; }
+.faq details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 20px;
+  transition: border-color var(--t);
+}
+.faq details[open] { border-color: var(--accent-line); }
+.faq summary {
+  cursor: pointer;
+  padding: 18px 0;
+  font-weight: 600;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: '';
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(45deg);
+  transition: transform var(--t);
+}
+.faq details[open] summary::after { transform: rotate(-135deg); }
+.faq p { color: var(--muted); margin: 0 0 18px; font-size: 14.5px; }
+
+/* ── Команда и контакты ───────────────────────────────────────────────────── */
+
+.people { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.person {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+.person h3 { font-size: 17px; margin-bottom: 4px; }
+.person .role { color: var(--accent-text); font-size: 13px; margin: 0 0 10px; }
+.person p { color: var(--muted); font-size: 14px; margin: 0; }
+
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.contact-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+.contact-card .label {
+  color: var(--faint);
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px;
+}
+.contact-card .value { font-size: 18px; font-weight: 600; text-decoration: none; }
+.contact-card a.value:hover { color: var(--accent); }
+.contact-card p { color: var(--muted); font-size: 14px; margin: 8px 0 0; }
+
+/* Карта не подключена: чужой скрипт тянет мегабайты и ставит куки без
+   спроса. Вместо неё — честная плашка с адресом и ссылкой наружу. */
+.map-stub {
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  padding: clamp(28px, 6vw, 56px);
+  text-align: center;
+  background: var(--surface);
+}
+.map-stub p { color: var(--muted); margin: 0 0 16px; }
+
+/* Подпись для скринридера: видящий понимает таблицу из текста рядом,
+   слушающий — нет, а таблица без подписи в озвучке повисает в воздухе. */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
