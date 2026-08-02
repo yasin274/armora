@@ -129,10 +129,13 @@
               <label>Не заполняйте<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
             </div>
 
-            <label class="consent" id="fieldConsent">
-              <input type="checkbox" name="consent" required>
-              <span>Согласен на обработку персональных данных <a href="privacy.html">согласно политике</a></span>
-            </label>
+            <div id="fieldConsent">
+              <label class="consent">
+                <input type="checkbox" name="consent" required>
+                <span>Согласен на обработку персональных данных <a href="privacy.html">согласно политике</a></span>
+              </label>
+              <span class="field-error" data-error></span>
+            </div>
 
             <button class="btn btn-primary" type="submit" style="width:100%">Отправить заявку</button>
             <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>

@@ -855,3 +855,16 @@ h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.02em; font-weight:
   white-space: nowrap;
   border: 0;
 }
+
+/* На 320px шапка не помещалась: логотип, кнопка меню и «Записаться» вместе
+   с зазорами требовали 320px внутри контейнера в 292px. Кнопку обрезало на
+   14px, а `overflow-x: hidden` не давал до неё доскроллить — то есть до
+   действия было не добраться вообще.
+
+   Прячем не кнопку, а лишний воздух: в меню лежат только ссылки на разделы,
+   и убрав кнопку, мы лишили бы узкий экран пути к записи. */
+@media (max-width: 380px) {
+  .nav-inner { gap: 10px; }
+  .nav-inner .btn-sm { padding: 10px 13px; font-size: 11.5px; letter-spacing: 0.02em; }
+  .logo { font-size: 17px; letter-spacing: 0.12em; }
+}

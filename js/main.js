@@ -261,12 +261,41 @@
       phone.value = out;
     });
 
+    /**
+     * Показывает ошибку поля — и глазам, и вспомогательной технике.
+     *
+     * Раньше здесь менялся только класс и текст. Видящий ошибку замечал,
+     * незрячий отправлял форму и не слышал ничего: поле не было помечено
+     * как ошибочное, а текст ошибки ни с чем не связан. Теперь у сообщения
+     * есть идентификатор, поле получает aria-invalid и ссылку на него
+     * через aria-describedby.
+     *
+     * Возвращает поле, если оно не прошло проверку, — по нему потом
+     * ставится фокус на первую ошибку.
+     */
     function setError(fieldId, message) {
       var field = document.getElementById(fieldId);
-      field.classList.toggle('is-error', Boolean(message));
+      var control = field.querySelector('input, select, textarea');
       var slot = field.querySelector('[data-error]');
-      if (slot) slot.textContent = message || '';
-      return !message;
+
+      field.classList.toggle('is-error', Boolean(message));
+
+      if (slot) {
+        if (!slot.id) slot.id = fieldId + '-error';
+        slot.textContent = message || '';
+      }
+
+      if (control) {
+        if (message) {
+          control.setAttribute('aria-invalid', 'true');
+          if (slot) control.setAttribute('aria-describedby', slot.id);
+        } else {
+          control.removeAttribute('aria-invalid');
+          control.removeAttribute('aria-describedby');
+        }
+      }
+
+      return message ? control : null;
     }
 
     form.addEventListener('submit', function (e) {
@@ -274,17 +303,22 @@
       status.textContent = '';
       status.className = 'form-status';
 
-      var ok = true;
-      ok = setError('fieldName', form.elements.name.value.trim().length >= 2 ? '' : 'Напишите, как к вам обращаться') && ok;
-      ok = setError('fieldPhone', phone.value.replace(/\D/g, '').length === 11 ? '' : 'Нужен телефон из 11 цифр') && ok;
+      /* Проверяем всё сразу и собираем непрошедшие поля по порядку: фокус
+         уходит на первое из них. Иначе человек, который не видит подсветку,
+         остаётся на кнопке и не знает, куда возвращаться. */
+      var invalid = [
+        setError('fieldName', form.elements.name.value.trim().length >= 2
+          ? '' : 'Напишите, как к вам обращаться'),
+        setError('fieldPhone', phone.value.replace(/\D/g, '').length === 11
+          ? '' : 'Нужен телефон из 11 цифр'),
+        setError('fieldConsent', form.elements.consent.checked
+          ? '' : 'Отметьте согласие, без него мы не можем принять заявку'),
+      ].filter(Boolean);
 
-      if (!form.elements.consent.checked) {
-        status.textContent = 'Без согласия на обработку данных мы не можем принять заявку.';
-        status.className = 'form-status is-error';
-        ok = false;
+      if (invalid.length) {
+        invalid[0].focus();
+        return;
       }
-
-      if (!ok) return;
 
       /* Две тихие проверки против ботов. Обе отвечают «принято» и ничего не
          отправляют: бот, получивший отказ, подбирает обход, а бот,
